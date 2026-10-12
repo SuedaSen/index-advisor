@@ -1,0 +1,7 @@
+[
+  {"name":"Q1-customer-segment-orders","frequency":500,"sql":"SELECT o.o_orderkey, o.o_orderdate, o.o_totalprice FROM tpch.customer c JOIN tpch.orders o ON o.o_custkey = c.c_custkey WHERE c.c_mktsegment = 'BUILDING' AND o.o_orderdate >= DATE '1995-01-01' ORDER BY o.o_orderdate DESC LIMIT 100"},
+  {"name":"Q2-shipping-mode-summary","frequency":450,"sql":"SELECT l_shipmode, COUNT(*) FROM tpch.lineitem WHERE l_shipdate >= DATE '1995-01-01' AND l_shipdate < DATE '1996-01-01' AND l_shipmode IN ('AIR', 'RAIL') GROUP BY l_shipmode"},
+  {"name":"Q3-discounted-revenue","frequency":50,"sql":"SELECT SUM(l_extendedprice * l_discount) FROM tpch.lineitem WHERE l_shipdate >= DATE '1994-01-01' AND l_shipdate < DATE '1995-01-01' AND l_discount BETWEEN 0.05 AND 0.07 AND l_quantity < 24"},
+  {"name":"Q4-priority-orders","frequency":300,"sql":"SELECT o_orderpriority, COUNT(*) FROM tpch.orders WHERE o_orderdate >= DATE '1996-01-01' AND o_orderdate < DATE '1996-04-01' GROUP BY o_orderpriority ORDER BY o_orderpriority"},
+  {"name":"Q5-supplier-parts","frequency":250,"sql":"SELECT s.s_name, ps.ps_supplycost FROM tpch.supplier s JOIN tpch.partsupp ps ON ps.ps_suppkey = s.s_suppkey WHERE s.s_nationkey = 7 AND ps.ps_supplycost < 100 ORDER BY ps.ps_supplycost LIMIT 100"}
+]
