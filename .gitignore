@@ -1,0 +1,17 @@
+# Operating system and IDE files
+.DS_Store
+.idea/
+.vscode/
+*.iml
+
+# Java/Maven build output
+target/
+
+# Local configuration and credentials
+.env
+.env.*
+
+# Keep reproducible reports, but ignore any other generated output.
+output/*
+!output/reports/
+!output/reports/**
