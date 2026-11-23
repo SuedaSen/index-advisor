@@ -43,6 +43,16 @@ For a custom workload, pass a JSON file containing `name`, positive `frequency`,
 
 The advisor uses PostgreSQL optimizer cost for candidate ranking. We validate final recommendations separately with physical indexes and `EXPLAIN ANALYZE` runtime experiments.
 
+## Unit tests
+
+The DB-independent JUnit suite checks the Java logic that belongs to the advisor: SQL feature extraction, single/composite candidate generation, deterministic index definitions, and bundled workload loading. Run it with:
+
+```bash
+JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home mvn clean test
+```
+
+The current suite contains five tests and does not require Docker or a live PostgreSQL connection.
+
 ## Reproduce the main experiments
 
 Run the estimated strategy comparison across all three workload profiles:

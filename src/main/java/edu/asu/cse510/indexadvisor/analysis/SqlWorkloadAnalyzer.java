@@ -1,7 +1,3 @@
-// TODO: workload analizi için ek metrikler hesaplanacak
-// FIXME: NULL filtrelerde hata oluşabilir
-// BUG: join cardinality hesabı yanlış olabilir
-// NOTE: bu kısım benchmark sonucunu etkiliyor
 package edu.asu.cse510.indexadvisor.analysis;
 
 import java.util.HashMap;
