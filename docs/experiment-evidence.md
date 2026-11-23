@@ -1,6 +1,6 @@
 # CSE 510 Experiment Evidence
 
-This file preserves the verified measurements and interpretations for the final technical report and presentation. Values below are results observed on the local PostgreSQL 17 / TPC-H SF1 environment on the M3 MacBook Air. Runtime measurements can vary slightly between runs because of PostgreSQL caching and normal system activity; the benchmark uses warm-up runs and medians to reduce that noise.
+This file preserves the verified measurements and interpretations for the final technical report and presentation. Values below are results observed on the local PostgreSQL 17 / TPC-H SF1 environment on the M3 MacBook Air. Runtime measurements can vary slightly between runs because of PostgreSQL caching and normal system activity; the benchmark uses warm-up runs and medians to reduce that noise. The three-profile physical strategy comparison in `physical-experiment-summary.md` is the source of truth for final comparative claims.
 
 ## 1. Advisor configuration evidence
 
@@ -50,7 +50,7 @@ The focused Q1 demo compared a baseline plan with a manually created `tpch.order
 
 This is roughly a 15x speedup in that captured interactive run. The index lets PostgreSQL retrieve recent rows in descending `o_orderdate` order and avoid the expensive sort.
 
-## 4. Read/write trade-off
+## 4. Read/write trade-off: sensitivity result
 
 We measured write operations with 2 warm-up and 5 measured runs. Every INSERT and UPDATE occurred in a transaction that was rolled back, so benchmark data was not retained. The update changes `o_orderdate`, an indexed column, to include index-maintenance cost.
 
@@ -59,7 +59,7 @@ We measured write operations with 2 warm-up and 5 measured runs. Every INSERT an
 | INSERT 10,000 orders | 26.20 | 38.75 | 47.88% |
 | UPDATE 10,000 order dates | 7.26 | 11.83 | 62.89% |
 
-Interpretation: the advisor's index configuration substantially improves the read-heavy workload but introduces measurable write overhead. This demonstrates the read/write trade-off expected in physical database design.
+These earlier rollback-only measurements demonstrate that secondary indexes can introduce write overhead. However, the current reproducibility check at a 150 MB Balanced Mixed budget selected the same index membership for the read-only and write-aware policies at penalty weight 1.0. We therefore do not use the earlier two-configuration comparison as a final claim that our policy always reduces write cost. Instead, we present write awareness as an explicit, configurable policy and report its sensitivity as a limitation.
 
 ## 5. Reproducibility commands
 

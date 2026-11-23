@@ -4,15 +4,15 @@ This summary consolidates three TPC-H SF1 workload profiles at a 500 MB **HypoPG
 
 | Workload profile | Independent weighted time | Joint weighted time | Result for joint re-evaluation | Independent physical MB | Joint physical MB |
 |---|---:|---:|---|---:|---:|
-| Dashboard / read-heavy | 19,260.80 | 19,548.65 | 1.49% slower; near tie | 113.0 | 109.4 |
-| Balanced mixed | 40,934.46 | 40,140.81 | **1.94% faster** | 113.0 | 104.9 |
-| Analytical aggregation | 105,037.48 | 103,826.90 | **1.15% faster** | 112.7 | 104.7 |
+| Dashboard / read-heavy | 26,487.95 | 44,673.05 | 68.6% slower; independent is faster | 100.4 | 98.9 |
+| Balanced mixed | 43,731.92 | 44,157.96 | 0.97% slower; near-equivalent | 113.0 | 104.9 |
+| Analytical aggregation | 114,317.68 | 112,920.73 | **1.24% faster** | 112.7 | 104.7 |
 
 ## Interpretation
 
-Joint re-evaluation does not dominate the independent baseline on every workload. It is near-equivalent on the read-heavy profile and improves the two other profiles while using approximately 3–8 MB less physical index storage. This variation is an expected empirical finding: optimizer what-if costs are useful signals but are not identical to executor runtimes, particularly for an aggregation-heavy query such as Q3.
+Joint re-evaluation does not dominate the independent baseline on every workload. It is slower on the read-heavy Dashboard profile, near-equivalent on Balanced Mixed, and slightly faster on Analytical Aggregation, while using less physical index storage in all three profiles. This variation is an expected empirical finding: optimizer what-if costs are useful signals but are not identical to executor runtimes. In Dashboard, the independent configuration retains additional overlapping `orders` indexes and materially improves the high-frequency priority report.
 
-For the final technical report, we will therefore report the complete table rather than making a universal-performance claim. Our supported claim is narrower: re-evaluating index interactions produces competitive configurations with lower physical storage, and it improves measured runtime for two of the three distinct workload mixes.
+For the final technical report, we therefore report the complete table rather than making a universal-performance claim. Our supported claim is narrower: re-evaluating index interactions produces a more compact configuration and can remain competitive, but a what-if recommendation must be checked with physical execution measurements.
 
 ## Reproducibility artifacts
 
@@ -22,15 +22,6 @@ For the final technical report, we will therefore report the complete table rath
 
 All report figures use a frequency-weighted `ms-equivalent` total: query median time multiplied by that query's workload frequency, summed across the workload. The 500 MB budget is based on HypoPG's size estimate; physical sizes are shown separately because the two can differ.
 
-## Physical write-aware validation
+## Write-aware sensitivity check
 
-We also evaluated the two 150 MB Balanced Mixed selections with rollback-only batches of 10,000 `orders` INSERTs and 10,000 `o_orderdate` UPDATEs. The read-only configuration chose two `orders` date-based indexes, while the write-aware configuration replaced the composite `orders(o_orderdate, o_orderpriority)` index with a `partsupp` composite index.
-
-| Configuration | Physical index MB | INSERT overhead | UPDATE overhead |
-|---|---:|---:|---:|
-| Read-only joint selection | 38.3 | 81.80% | 86.64% |
-| Write-aware joint selection | 51.9 | **16.27%** | **38.21%** |
-
-The write-aware policy reduced INSERT overhead by 65.53 percentage points and UPDATE overhead by 48.43 percentage points. Physical size alone does not explain the result: the write-aware configuration is larger, but it avoids one date-based `orders` index and therefore has much lower maintenance cost for the measured `o_orderdate` update workload.
-
-Source artifact: `output/reports/physical-write-aware-validation-tpch-balanced-mixed-150mb.md`.
+For Balanced Mixed at a 150 MB HypoPG-estimated budget, we tested write-penalty weights of 1.0 and 5.0. At 1.0, the write-aware policy selected the same index membership as read-only joint selection. At 5.0, it added `customer(c_mktsegment, c_custkey)` but retained `orders(o_orderdate)`. The current workload therefore does not justify a headline claim that this policy reduces physical write overhead; it instead demonstrates that the policy is explicit and sensitive to the chosen write-exposure model. This limitation belongs in the final technical report.

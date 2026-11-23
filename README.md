@@ -83,8 +83,8 @@ mvn --quiet exec:java \
 
 ## Verified findings
 
-At a 500 MB HypoPG-estimated budget, we physically measured Dashboard/read-heavy, Balanced Mixed, and Analytical Aggregation workloads using three independent repetitions, alternating strategy order. Joint re-evaluation was near-equivalent on Dashboard and improved the Balanced and Analytical profiles while usually selecting less physical index storage.
+At a 500 MB HypoPG-estimated budget, we physically measured Dashboard/read-heavy, Balanced Mixed, and Analytical Aggregation workloads using three independent repetitions, alternating strategy order. Joint re-evaluation used less physical index storage in all three profiles, but executor runtime varied by workload: it was slower on Dashboard, near-equivalent on Balanced Mixed, and slightly faster on Analytical Aggregation. This is why the project reports physical validation rather than treating optimizer estimates as runtime guarantees.
 
-At a 150 MB budget on Balanced Mixed, the write-aware policy traded estimated read-cost improvement from 15.92% to 14.84% to avoid an additional date-based `orders` index. In rollback-only physical measurements, it reduced INSERT overhead from 81.80% to 16.27% and UPDATE overhead from 86.64% to 38.21%.
+The write-aware selector is included as a configurable policy experiment. In the current Balanced Mixed workload, a penalty weight of 1.0 did not change the selected index membership; a weight of 5.0 added a `customer` index while retaining the date-based `orders` index. We report this sensitivity result instead of making a general claim that write-aware selection always reduces write overhead.
 
 See [docs/physical-experiment-summary.md](docs/physical-experiment-summary.md) for the evidence summary and `output/reports/` for the full, reproducible reports.

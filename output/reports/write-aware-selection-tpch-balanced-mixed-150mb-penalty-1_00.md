@@ -8,5 +8,5 @@
 
 | Policy | Estimated index MB | HypoPG read-cost improvement | Selected indexes |
 |---|---:|---:|---|
-| Read-only joint selection | 141.9 | 15.92% | `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.supplier(s_nationkey, s_suppkey); tpch.orders(o_orderdate, o_orderpriority)` |
-| Write-aware joint selection | 93.6 | 14.84% | `tpch.partsupp(ps_supplycost); tpch.orders(o_orderdate); tpch.supplier(s_nationkey, s_suppkey); tpch.partsupp(ps_supplycost, ps_suppkey)` |
+| Read-only joint selection | 93.6 | 15.33% | `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.supplier(s_nationkey, s_suppkey); tpch.partsupp(ps_supplycost, ps_suppkey)` |
+| Write-aware joint selection | 93.6 | 15.33% | `tpch.partsupp(ps_supplycost); tpch.orders(o_orderdate); tpch.supplier(s_nationkey, s_suppkey); tpch.partsupp(ps_supplycost, ps_suppkey)` |

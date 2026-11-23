@@ -10,37 +10,37 @@
 
 | Strategy | Estimated index MB | Physical index MB | Weighted baseline (ms-equivalent) | Weighted indexed (ms-equivalent) | Speedup |
 |---|---:|---:|---:|---:|---:|
-| Independent ranking | 493.5 | 113.0 | 129675.70 | 19260.80 | 6.73x |
+| Independent ranking | 486.6 | 100.4 | 137434.40 | 26487.95 | 5.19x |
 
-Selected indexes: `tpch.lineitem(l_shipmode, l_shipdate); tpch.orders(o_orderdate, o_orderpriority); tpch.orders(o_orderdate); tpch.orders(o_orderdate, o_custkey); tpch.partsupp(ps_supplycost); tpch.supplier(s_nationkey); tpch.supplier(s_nationkey, s_suppkey)`
-
-| Query | Frequency | Baseline median (ms) | Indexed median (ms) | Speedup |
-|---|---:|---:|---:|---:|
-| `Q1-customer-segment-orders` | 500 | 66.80 | 0.60 | 110.96x |
-| `Q2-shipping-mode-summary` | 450 | 158.43 | 20.91 | 7.58x |
-| `Q3-discounted-revenue` | 50 | 135.42 | 137.65 | 0.98x |
-| `Q4-priority-orders` | 300 | 38.77 | 7.43 | 5.22x |
-| `Q5-supplier-parts` | 250 | 26.34 | 1.75 | 15.07x |
-
-| Joint re-evaluation (ours) | 474.7 | 109.4 | 129675.70 | 19548.65 | 6.63x |
-
-Selected indexes: `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.lineitem(l_shipmode, l_shipdate); tpch.supplier(s_nationkey, s_suppkey); tpch.orders(o_orderdate, o_orderpriority); tpch.partsupp(ps_supplycost, ps_suppkey); tpch.customer(c_mktsegment, c_custkey)`
+Selected indexes: `tpch.lineitem(l_shipmode, l_shipdate); tpch.orders(o_orderdate, o_orderpriority); tpch.orders(o_orderdate); tpch.orders(o_orderdate, o_custkey); tpch.customer(c_mktsegment, c_custkey); tpch.supplier(s_nationkey); tpch.supplier(s_nationkey, s_suppkey)`
 
 | Query | Frequency | Baseline median (ms) | Indexed median (ms) | Speedup |
 |---|---:|---:|---:|---:|
-| `Q1-customer-segment-orders` | 500 | 66.80 | 0.66 | 101.98x |
-| `Q2-shipping-mode-summary` | 450 | 158.43 | 21.01 | 7.54x |
-| `Q3-discounted-revenue` | 50 | 135.42 | 136.82 | 0.99x |
-| `Q4-priority-orders` | 300 | 38.77 | 8.60 | 4.51x |
-| `Q5-supplier-parts` | 250 | 26.34 | 1.39 | 18.91x |
+| `Q1-customer-segment-orders` | 500 | 70.12 | 0.67 | 105.13x |
+| `Q2-shipping-mode-summary` | 450 | 169.36 | 22.52 | 7.52x |
+| `Q3-discounted-revenue` | 50 | 147.36 | 148.84 | 0.99x |
+| `Q4-priority-orders` | 300 | 41.80 | 7.56 | 5.53x |
+| `Q5-supplier-parts` | 250 | 25.02 | 25.25 | 0.99x |
+
+| Joint re-evaluation (ours) | 394.0 | 98.9 | 137434.40 | 44673.05 | 3.08x |
+
+Selected indexes: `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.lineitem(l_shipmode, l_shipdate); tpch.supplier(s_nationkey, s_suppkey); tpch.partsupp(ps_supplycost, ps_suppkey); tpch.customer(c_mktsegment, c_custkey)`
+
+| Query | Frequency | Baseline median (ms) | Indexed median (ms) | Speedup |
+|---|---:|---:|---:|---:|
+| `Q1-customer-segment-orders` | 500 | 70.12 | 0.67 | 104.04x |
+| `Q2-shipping-mode-summary` | 450 | 169.36 | 22.95 | 7.38x |
+| `Q3-discounted-revenue` | 50 | 147.36 | 143.13 | 1.03x |
+| `Q4-priority-orders` | 300 | 41.80 | 88.35 | 0.47x |
+| `Q5-supplier-parts` | 250 | 25.02 | 1.39 | 18.00x |
 
 ## Replicate weighted summaries
 
 | Strategy | Repetition | Weighted baseline (ms-equivalent) | Weighted indexed (ms-equivalent) | Speedup |
 |---|---:|---:|---:|---:|
-| Independent ranking | 1 | 129775.10 | 18919.70 | 6.86x |
-| Independent ranking | 2 | 128605.80 | 19528.20 | 6.59x |
-| Independent ranking | 3 | 138591.55 | 19280.40 | 7.19x |
-| Joint re-evaluation (ours) | 1 | 129775.10 | 18943.70 | 6.85x |
-| Joint re-evaluation (ours) | 2 | 128605.80 | 19929.30 | 6.45x |
-| Joint re-evaluation (ours) | 3 | 138591.55 | 19435.65 | 7.13x |
+| Independent ranking | 1 | 132814.55 | 26096.85 | 5.09x |
+| Independent ranking | 2 | 136983.90 | 25901.05 | 5.29x |
+| Independent ranking | 3 | 145852.40 | 30581.25 | 4.77x |
+| Joint re-evaluation (ours) | 1 | 132814.55 | 44499.85 | 2.98x |
+| Joint re-evaluation (ours) | 2 | 136983.90 | 46332.50 | 2.96x |
+| Joint re-evaluation (ours) | 3 | 145852.40 | 44415.85 | 3.28x |

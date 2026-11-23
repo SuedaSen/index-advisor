@@ -10,37 +10,37 @@
 
 | Strategy | Estimated index MB | Physical index MB | Weighted baseline (ms-equivalent) | Weighted indexed (ms-equivalent) | Speedup |
 |---|---:|---:|---:|---:|---:|
-| Independent ranking | 493.5 | 113.0 | 94702.91 | 40934.46 | 2.31x |
+| Independent ranking | 493.5 | 113.0 | 101851.26 | 43731.92 | 2.33x |
 
 Selected indexes: `tpch.lineitem(l_shipmode, l_shipdate); tpch.orders(o_orderdate, o_orderpriority); tpch.orders(o_orderdate); tpch.orders(o_orderdate, o_custkey); tpch.partsupp(ps_supplycost); tpch.supplier(s_nationkey); tpch.supplier(s_nationkey, s_suppkey)`
 
 | Query | Frequency | Baseline median (ms) | Indexed median (ms) | Speedup |
 |---|---:|---:|---:|---:|
-| `Q1-customer-segment-orders` | 200 | 68.61 | 0.60 | 114.92x |
-| `Q2-shipping-mode-summary` | 220 | 164.36 | 20.89 | 7.87x |
-| `Q3-discounted-revenue` | 250 | 136.71 | 139.09 | 0.98x |
-| `Q4-priority-orders` | 150 | 38.59 | 7.55 | 5.11x |
-| `Q5-supplier-parts` | 180 | 26.97 | 1.75 | 15.43x |
+| `Q1-customer-segment-orders` | 200 | 69.96 | 0.61 | 115.26x |
+| `Q2-shipping-mode-summary` | 220 | 180.13 | 21.72 | 8.29x |
+| `Q3-discounted-revenue` | 250 | 149.06 | 149.56 | 1.00x |
+| `Q4-priority-orders` | 150 | 40.57 | 7.52 | 5.40x |
+| `Q5-supplier-parts` | 180 | 27.11 | 1.76 | 15.45x |
 
-| Joint re-evaluation (ours) | 467.4 | 104.9 | 94702.91 | 40140.81 | 2.36x |
+| Joint re-evaluation (ours) | 467.4 | 104.9 | 101851.26 | 44157.96 | 2.31x |
 
-Selected indexes: `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.lineitem(l_shipmode, l_shipdate); tpch.supplier(s_nationkey, s_suppkey); tpch.orders(o_orderdate, o_orderpriority); tpch.partsupp(ps_supplycost, ps_suppkey)`
+Selected indexes: `tpch.orders(o_orderdate); tpch.partsupp(ps_supplycost); tpch.lineitem(l_shipmode, l_shipdate); tpch.supplier(s_nationkey, s_suppkey); tpch.partsupp(ps_supplycost, ps_suppkey); tpch.orders(o_orderdate, o_orderpriority)`
 
 | Query | Frequency | Baseline median (ms) | Indexed median (ms) | Speedup |
 |---|---:|---:|---:|---:|
-| `Q1-customer-segment-orders` | 200 | 68.61 | 0.59 | 117.08x |
-| `Q2-shipping-mode-summary` | 220 | 164.36 | 21.06 | 7.80x |
-| `Q3-discounted-revenue` | 250 | 136.71 | 136.00 | 1.01x |
-| `Q4-priority-orders` | 150 | 38.59 | 7.58 | 5.09x |
-| `Q5-supplier-parts` | 180 | 26.97 | 1.41 | 19.15x |
+| `Q1-customer-segment-orders` | 200 | 69.96 | 0.60 | 117.19x |
+| `Q2-shipping-mode-summary` | 220 | 180.13 | 21.63 | 8.33x |
+| `Q3-discounted-revenue` | 250 | 149.06 | 151.65 | 0.98x |
+| `Q4-priority-orders` | 150 | 40.57 | 7.46 | 5.44x |
+| `Q5-supplier-parts` | 180 | 27.11 | 1.39 | 19.49x |
 
 ## Replicate weighted summaries
 
 | Strategy | Repetition | Weighted baseline (ms-equivalent) | Weighted indexed (ms-equivalent) | Speedup |
 |---|---:|---:|---:|---:|
-| Independent ranking | 1 | 91252.27 | 38883.81 | 2.35x |
-| Independent ranking | 2 | 94457.81 | 41908.43 | 2.25x |
-| Independent ranking | 3 | 98997.33 | 40934.62 | 2.42x |
-| Joint re-evaluation (ours) | 1 | 91252.27 | 39216.85 | 2.33x |
-| Joint re-evaluation (ours) | 2 | 94457.81 | 40144.29 | 2.35x |
-| Joint re-evaluation (ours) | 3 | 98997.33 | 40795.22 | 2.43x |
+| Independent ranking | 1 | 94406.77 | 42883.98 | 2.20x |
+| Independent ranking | 2 | 101851.26 | 43863.90 | 2.32x |
+| Independent ranking | 3 | 103860.40 | 46429.91 | 2.24x |
+| Joint re-evaluation (ours) | 1 | 94406.77 | 43113.86 | 2.19x |
+| Joint re-evaluation (ours) | 2 | 101851.26 | 44246.57 | 2.30x |
+| Joint re-evaluation (ours) | 3 | 103860.40 | 45600.13 | 2.28x |
